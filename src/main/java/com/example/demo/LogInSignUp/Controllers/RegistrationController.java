@@ -1,6 +1,6 @@
-package com.example.demo.LogInSignUp.persistence.Controllers;
+package com.example.demo.LogInSignUp.Controllers;
 
-import com.example.demo.LogInSignUp.persistence.Services.UserService;
+import com.example.demo.LogInSignUp.Services.UserService;
 import com.example.demo.LogInSignUp.persistence.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

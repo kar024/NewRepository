@@ -1,4 +1,4 @@
-package com.example.demo.LogInSignUp.persistence.Services;
+package com.example.demo.LogInSignUp.Services;
 
 import com.example.demo.LogInSignUp.persistence.models.Role;
 import com.example.demo.LogInSignUp.persistence.models.User;

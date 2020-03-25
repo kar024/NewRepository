@@ -1,4 +1,4 @@
-package com.example.demo.LogInSignUp.persistence.Configs;
+package com.example.demo.LogInSignUp.Configs;
 
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

@@ -1,8 +1,7 @@
-package com.example.demo.LogInSignUp.persistence.Controllers;
+package com.example.demo.LogInSignUp.Controllers;
 
-import com.example.demo.LogInSignUp.persistence.Services.UserService;
+import com.example.demo.LogInSignUp.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
