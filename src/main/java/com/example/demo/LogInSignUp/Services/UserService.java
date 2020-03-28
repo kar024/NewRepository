@@ -2,7 +2,6 @@ package com.example.demo.LogInSignUp.Services;
 
 import com.example.demo.LogInSignUp.persistence.models.Role;
 import com.example.demo.LogInSignUp.persistence.models.User;
-import com.example.demo.LogInSignUp.persistence.repositories.RoleRepository;
 import com.example.demo.LogInSignUp.persistence.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +22,6 @@ public class UserService implements UserDetailsService {
     private EntityManager em;
     @Autowired
     UserRepository userRepository;
-    RoleRepository roleRepository;
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
