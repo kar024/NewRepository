@@ -1,8 +1,13 @@
 package com.example.demo.LogInSignUp.Services;
 
+import com.example.demo.LogInSignUp.Rest.Controllers.RegistrationController;
+import com.example.demo.LogInSignUp.Rest.Models.UserRequestModel;
+import com.example.demo.LogInSignUp.Rest.Models.UserResponseModel;
 import com.example.demo.LogInSignUp.persistence.models.Role;
 import com.example.demo.LogInSignUp.persistence.models.User;
 import com.example.demo.LogInSignUp.persistence.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,9 +20,11 @@ import javax.persistence.PersistenceContext;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
     @PersistenceContext
     private EntityManager em;
     @Autowired
@@ -34,7 +41,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User findUserById(Long userId) {
+    public UserResponseModel findUserById(Long userId) {
         Optional<User> user = userRepository.findById(userId);
         User userfound;
         if (user.equals(null)) {
@@ -42,20 +49,26 @@ public class UserService implements UserDetailsService {
         } else {
             userfound = user.get();
         }
-        return userfound;
+        return buildUserResponseModelFromUser(userfound);
     }
 
-    public List<User> allUsers() {
-        return userRepository.findAll();
+    public List<UserResponseModel> allUsers() {
+        final List<User> userList = userRepository.findAll();
+        return userList.stream()
+                .map((each -> buildUserResponseModelFromUser(each))).collect(Collectors.toList());
     }
 
-    public Boolean saveUser(User user) {
+    public Boolean saveUser(UserRequestModel user) {
         if (userRepository.findByUsername(user.getUsername()) != null) {
             return false;
         }
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+
+        User newUser = buildUserFromUserRequestModel(user);
+
+        userRepository.save(newUser);
+
         return true;
     }
 
@@ -67,9 +80,18 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    public List<User> userGetList(Long idMin) {
-        return em.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-                .setParameter("paramId", idMin).getResultList();
+
+    public User buildUserFromUserRequestModel(UserRequestModel userRequestModel) {
+        User user = new User();
+        user.setPasswordConfirm(userRequestModel.getPasswordConfirm());
+        user.setPassword(user.getPassword());
+        user.setUsername(userRequestModel.getUsername());
+        user.setRoles(userRequestModel.getRoles());
+        return user;
     }
 
+    public UserResponseModel buildUserResponseModelFromUser(User user) {
+        UserResponseModel userResponseModel = new UserResponseModel(user.getId(), user.getPassword(), user.getUsername(), user.getRoles());
+        return userResponseModel;
+    }
 }

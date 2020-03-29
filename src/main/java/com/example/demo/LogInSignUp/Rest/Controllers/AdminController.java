@@ -1,11 +1,9 @@
-package com.example.demo.LogInSignUp.Controllers;
+package com.example.demo.LogInSignUp.Rest.Controllers;
 
+import com.example.demo.LogInSignUp.Rest.Models.UserResponseModel;
 import com.example.demo.LogInSignUp.Services.UserService;
-import com.example.demo.LogInSignUp.persistence.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,18 +14,17 @@ public class AdminController {
     private UserService userService;
 
     @GetMapping(value = "/admin")
-    public ResponseEntity<List<User>> userList() {
+    public ResponseEntity<List<UserResponseModel>> userList() {
         return ResponseEntity.ok(userService.allUsers());
     }
 
     @DeleteMapping("/admin")
-    public String deleteUser(@RequestParam(required = true, defaultValue = "") Long userId) {
+    public void deleteUser(@RequestParam(required = true, defaultValue = "") Long userId) {
         userService.deleteUser(userId);
-        return "redirect:/admin";
     }
 
     @GetMapping("/admin/get/{userId}")
-    public ResponseEntity<List<User>> getUsers(@PathVariable("userId") Long userId) {
-        return ResponseEntity.ok(userService.userGetList(userId));
+    public ResponseEntity<UserResponseModel> getUsers(@PathVariable("userId") Long userId) {
+        return ResponseEntity.ok(userService.findUserById(userId));
     }
 }
